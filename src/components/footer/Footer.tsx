@@ -1,4 +1,5 @@
 import { Grid, GridItem } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const routeList = [
   {
@@ -14,13 +15,19 @@ const routeList = [
 const Footer = () => {
   return (
     <Grid
-      bgColor={"#191919"}
+      h={"100%"}
       py={{ base: 2 }}
       templateColumns={`repeat(${routeList.length},1fr)`}
+      alignContent={'center'}
+      bgColor={"#191919"}
       textAlign={"center"}
     >
       {routeList.map((route) => {
-        return <GridItem key={route.name}>{route.name}</GridItem>;
+        return (
+          <GridItem key={route.name}>
+            <Link to={route.path}>{route.name}</Link>
+          </GridItem>
+        );
       })}
     </Grid>
   );

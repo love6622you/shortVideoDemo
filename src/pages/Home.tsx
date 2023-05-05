@@ -1,12 +1,11 @@
-import { Container } from "@chakra-ui/react";
-
-import Comments from "./home/Comments";
-
 const Home = () => {
   return (
-    <Container maxW={{ base: "414px" }}>
-      <Comments />
-    </Container>
+    <div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur
+      aliquid velit porro minus numquam nesciunt, molestiae culpa quod, placeat
+      dolore, consectetur impedit nisi aut corporis rem voluptas facere!
+      Blanditiis, labore?
+    </div>
   );
 };
 
