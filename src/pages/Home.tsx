@@ -1,4 +1,4 @@
-import VideoPlayer from "@/components/video/plyr/VideoPlayer";
+import ReactPlayer from "@/components/video/react-player/VideoPlayer";
 
 import apiClient from "@/lib/axios";
 import { Box, Flex, Text } from "@chakra-ui/react";
@@ -12,6 +12,20 @@ type videoListProps = {
 };
 
 const Home = () => {
+  const [playerId, setPlayerId] = useState(null);
+
+  // Settings for the slider
+  const settings = {
+    dots: false,
+    arrows: false,
+    vertical: true,
+    verticalSwiping: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    draggable: false,
+    afterChange: (index: number) => setPlayerId(videoList[index].title)
+  };
+
   const [slider, setSlider] = useState<Slider | null>(null);
   const [videoList, setVideoList] = useState<any>([]);
   const [url, setUrl] = useState(
@@ -20,7 +34,8 @@ const Home = () => {
 
   const getVideoList = () => {
     apiClient({
-      url: "/following_list",
+      // url: "/following_list",
+      url: "/for_you_list",
       method: "get"
     }).then((res) => {
       const { data } = res;
@@ -39,15 +54,14 @@ const Home = () => {
         <Text>For You</Text>
       </Flex>
 
-      {videoList.length > 0 && videoList[0].play_url && (
-        <VideoPlayer url={videoList[0].play_url} />
-      )}
-
-      {/* <Box h={"95vh"}>
-        <Slider {...settings} ref={(slider) => setSlider(slider)}>
-          <Video url={videoList[0]?.play_url} />
-        </Slider>
-      </Box> */}
+      {/* <Box> */}
+      <Slider {...settings} ref={(slider) => setSlider(slider)}>
+        {videoList.length > 0 &&
+          videoList.map((video: videoListProps, index: number) => {
+            return <ReactPlayer key={index} id={playerId} video={video} />;
+          })}
+      </Slider>
+      {/* </Box> */}
     </Box>
   );
 };
