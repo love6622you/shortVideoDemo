@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
-import Discover from './pages/Discover';
+import Discover from "./pages/Discover";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
