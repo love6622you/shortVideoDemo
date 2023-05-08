@@ -93,14 +93,12 @@ const Home = () => {
         {RenderTypeList()}
       </Flex>
 
-      {/* <Box> */}
       <Slider {...settings} ref={(slider) => setSlider(slider)}>
         {videoList.length > 0 &&
           videoList.map((video: videoListProps, index: number) => {
             return <ReactPlayer key={index} id={playerId} video={video} />;
           })}
       </Slider>
-      {/* </Box> */}
     </Box>
   );
 };
