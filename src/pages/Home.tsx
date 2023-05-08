@@ -1,7 +1,7 @@
 import ReactPlayer from "@/components/video/react-player/VideoPlayer";
 
 import apiClient from "@/lib/axios";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, List, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
 
@@ -28,9 +28,9 @@ const Home = () => {
     arrows: false,
     vertical: true,
     verticalSwiping: true,
+    draggable: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    draggable: false,
     afterChange: (index: number) => setPlayerId(videoList[index].title)
   };
 
@@ -65,10 +65,18 @@ const Home = () => {
     return types.map((type) => (
       <Text
         key={type.key}
-        color={type.key === currentType ? "lightskyblue" : ""}
+        fontWeight={"bold"}
+        cursor={"pointer"}
+        {...(type.key === currentType
+          ? {
+              color: "lightskyblue"
+            }
+          : {})}
         onClick={() => {
-          type.onClick();
-          setCurrentType(type.key);
+          if (currentType !== type.key) {
+            type.onClick();
+            setCurrentType(type.key);
+          }
         }}
       >
         {type.label}
@@ -77,14 +85,14 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getVideoList("following_list");
+    getVideoList();
   }, []);
 
   return (
     <Box pos={"relative"}>
       <Flex
         pos={"absolute"}
-        top={5}
+        top={"2%"}
         w={"full"}
         justifyContent={"center"}
         gap={10}
@@ -96,7 +104,14 @@ const Home = () => {
       <Slider {...settings} ref={(slider) => setSlider(slider)}>
         {videoList.length > 0 &&
           videoList.map((video: videoListProps, index: number) => {
-            return <ReactPlayer key={index} id={playerId} video={video} />;
+            return (
+              <ReactPlayer
+                key={index}
+                id={playerId}
+                type={currentType}
+                video={video}
+              />
+            );
           })}
       </Slider>
     </Box>
