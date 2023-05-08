@@ -11,8 +11,16 @@ type videoListProps = {
   play_url: String;
 };
 
+enum ListType {
+  Following = "following",
+  ForYou = "forYou"
+}
+
 const Home = () => {
   const [playerId, setPlayerId] = useState(null);
+  const [slider, setSlider] = useState<Slider | null>(null);
+  const [videoList, setVideoList] = useState<any>([]);
+  const [currentType, setCurrentType] = useState(ListType.Following);
 
   // Settings for the slider
   const settings = {
@@ -26,16 +34,9 @@ const Home = () => {
     afterChange: (index: number) => setPlayerId(videoList[index].title)
   };
 
-  const [slider, setSlider] = useState<Slider | null>(null);
-  const [videoList, setVideoList] = useState<any>([]);
-  const [url, setUrl] = useState(
-    "http://localhost:3000/media/Bugatti_Chiron.m3u8"
-  );
-
-  const getVideoList = () => {
+  const getVideoList = (url = "following_list") => {
     apiClient({
-      // url: "/following_list",
-      url: "/for_you_list",
+      url,
       method: "get"
     }).then((res) => {
       const { data } = res;
@@ -43,15 +44,53 @@ const Home = () => {
     });
   };
 
+  const RenderTypeList = () => {
+    const types = [
+      {
+        key: ListType.Following,
+        label: "Following",
+        onClick: () => {
+          getVideoList("following_list");
+        }
+      },
+      {
+        key: ListType.ForYou,
+        label: "For You",
+        onClick: () => {
+          getVideoList("for_you_list");
+        }
+      }
+    ];
+
+    return types.map((type) => (
+      <Text
+        key={type.key}
+        color={type.key === currentType ? "lightskyblue" : ""}
+        onClick={() => {
+          type.onClick();
+          setCurrentType(type.key);
+        }}
+      >
+        {type.label}
+      </Text>
+    ));
+  };
+
   useEffect(() => {
-    getVideoList();
+    getVideoList("following_list");
   }, []);
 
   return (
     <Box pos={"relative"}>
-      <Flex gap={4} pos={"absolute"}>
-        <Text>Following</Text>
-        <Text>For You</Text>
+      <Flex
+        pos={"absolute"}
+        top={5}
+        w={"full"}
+        justifyContent={"center"}
+        gap={10}
+        zIndex={10}
+      >
+        {RenderTypeList()}
       </Flex>
 
       {/* <Box> */}
